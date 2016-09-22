@@ -1,0 +1,16 @@
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+newrelic.js
+.env
+.DS_Store
+
+public/js/dist/*.js
+public/stylesheets/dist/*.css
+bbcrix_sessions/*
+
+dump/
+
+./idea/
+./idea/*
