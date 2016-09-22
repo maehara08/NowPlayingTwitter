@@ -12,5 +12,5 @@ bbcrix_sessions/*
 
 dump/
 
-./idea/
-./idea/*
+.idea/
+.idea/*
