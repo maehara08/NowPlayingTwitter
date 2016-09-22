@@ -90,4 +90,8 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+io.on('connection',function (socket) {
+  console.log('a user is connected!')
+});
 module.exports.io=io;
