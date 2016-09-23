@@ -67,7 +67,7 @@ window.onload = function (argument) {
             // this.font = words[key] * 10 + 'px arial';
             // this.speed = 10;
             // this.speed = c.measureText(this.text).width;
-            this.speed = 5;
+            this.speed = Math.random()*7+2;
             // this.speed = (words[key]);
         };
 

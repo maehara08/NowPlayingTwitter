@@ -2,7 +2,9 @@
   "name": "NowPlayingTwitter",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
+  "engines": {
+    "node": "0.12.15"
+  },"scripts": {
     "start": "node ./bin/www"
   },
   "dependencies": {
