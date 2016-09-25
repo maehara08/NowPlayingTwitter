@@ -23,7 +23,7 @@ stream.on('tweet', function (tw) {
     var text = tw.text;
     var user_name = tw.user.name;
     io.io.sockets.emit('msg',text);
-    console.log(user_name + "> " + text);
+    // console.log(user_name + "> " + text);
 });
 
 // T.get('search/tweets', {q: '山手線', count: 30}, function (err, data) {
