@@ -3,10 +3,11 @@
  */
 var express = require('express');
 var router = express.Router();
-var io=require('../bin/www');
+var io = require('../bin/www');
 var Twit = require('twit');
-
-
+var connection = require('../util/mysql_util');
+require('dotenv').config();
+console.log(process.env.TWITTER_CONSUMER_KEY);
 var T = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -22,7 +23,7 @@ var stream = T.stream('statuses/filter', {track: 'なうぷれ,nowplaying'});
 stream.on('tweet', function (tw) {
     var text = tw.text;
     var user_name = tw.user.name;
-    io.io.sockets.emit('msg',text);
+    io.io.sockets.emit('msg', text);
     // console.log(user_name + "> " + text);
 });
 
@@ -42,6 +43,25 @@ stream.on('tweet', function (tw) {
 //     }
 // });
 
+router.get('/post', function (req, res) {
+    console.log(req.session);
+    // connection.query('select * from users',
+    //     function (err, result, fields) {
+    //         // console.log('select * from users where name = \"' + requestBody.name + '\" and password = \"' + requestBody.password + '\"');
+    //         if (err) {
+    //             console.error('error connecting: ' + err.stack);
+    //             // res.sendStatus(401);
+    //         } else if (result.length == 0) {
+    //             // res.sendStatus(401)
+    //         }
+    //         else {
+    //             // res.sendStatus(200);
+    //             console.log("result=" + result);
+    //         }
+    //     }
+    // );
+    res.redirect('/');
+});
 
 /* GET now playing page. */
 router.get('/', function (req, res, next) {
@@ -50,7 +70,7 @@ router.get('/', function (req, res, next) {
 
     // var www=require('../bin/www');
     // var io=www.io;
-
+    console.log(req.session.passport);
     res.render('now-playing', {
         title: 'login demo',
         session: req.session.passport //passportでログイン後は、このオブジェクトに情報が格納されます。

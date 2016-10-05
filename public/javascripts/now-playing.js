@@ -26,7 +26,12 @@ window.onload = function (argument) {
 
     Queue.prototype.enqueue = function (o) {
         if (this.size() > 200) {
-            this.dequeue();
+            while (!this.get(0).text) {
+                this.dequeue();
+            }
+            if (this.size()>400){
+                this.dequeue();
+            }
         }
         this.__a.push(o);
 
@@ -37,13 +42,16 @@ window.onload = function (argument) {
         this.text = key;
         this.wordsLength = this.text.length;
         // this.font = -(this.wordsLength)/4+50  + 'px arial';
-        this.font = (1000/(this.wordsLength-5)) + 'px arial';
-        this.width = c.measureText(this.text).width ;
-        this.x = -this.width*2;
+        this.fontSize = (1000 / (this.wordsLength -5 ));
+        this.font = this.fontSize + 'px arial';
+        c.font=this.font;
+        this.width = c.measureText(this.text).width;
+        this.x = -this.width * 2;
         this.y = Math.random() * h;
         // this.font = words[key] * 10 + 'px arial';
-        // this.speed = 10;
-        this.speed = 1000/(c.measureText(this.text).width-3);
+        // this.speed = 5;
+        this.speed = (this.fontSize)/5;
+        // this.speed = (this.fontSize)*this.fontSize/1000+4;
         // this.speed = (words[key]);
         console.log(this.font);
     };
@@ -64,8 +72,8 @@ window.onload = function (argument) {
     // canvas.height = window.innerHeight/2;
 
     if (canvas.getContext) {
-        c = canvas.getContext('2d'),
-            w = canvas.width,
+        c = canvas.getContext('2d');
+            w = canvas.width;
             h = canvas.height;
 
         c.strokeStyle = 'red';
@@ -84,8 +92,8 @@ window.onload = function (argument) {
 
         function move() {
             for (var i = 0; i < tweetQueue.size(); i++) {
-                if (tweetQueue.get(i).x  > w) {
-                    tweetQueue.get(i).text="";
+                if (tweetQueue.get(i).x > w) {
+                    tweetQueue.get(i).text = "";
                     // tweetQueue.get(i).font = Math.random() * 30 + 1 + 'px arial';
                     // tweetQueue.get(i).width = c.measureText(tweetQueue.get(i).text).width;
                     // tweetQueue.get(i).x = -tweetQueue.get(i).width;
