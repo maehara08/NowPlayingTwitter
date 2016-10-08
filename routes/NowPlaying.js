@@ -7,7 +7,6 @@ var io = require('../bin/www');
 var Twit = require('twit');
 var connection = require('../util/mysql_util');
 require('dotenv').config();
-console.log(process.env.TWITTER_CONSUMER_KEY);
 var T = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -27,6 +26,11 @@ stream.on('tweet', function (tw) {
     // console.log(user_name + "> " + text);
 });
 
+/**
+ * last fm username
+ */
+
+
 // T.get('search/tweets', {q: '山手線', count: 30}, function (err, data) {
 //     console.log(data);
 //     var statuses = data['statuses'];
@@ -44,23 +48,25 @@ stream.on('tweet', function (tw) {
 // });
 
 router.get('/post', function (req, res) {
-    console.log(req.session);
-    // connection.query('select * from users',
-    //     function (err, result, fields) {
-    //         // console.log('select * from users where name = \"' + requestBody.name + '\" and password = \"' + requestBody.password + '\"');
-    //         if (err) {
-    //             console.error('error connecting: ' + err.stack);
-    //             // res.sendStatus(401);
-    //         } else if (result.length == 0) {
-    //             // res.sendStatus(401)
-    //         }
-    //         else {
-    //             // res.sendStatus(200);
-    //             console.log("result=" + result);
-    //         }
-    //     }
-    // );
-    res.redirect('/');
+    var userName=req.session.passport.user.username;
+    console.log(userName);
+    connection.query(`select * from users where twitter_user_name = "${userName}"`,
+        function (err, result, fields) {
+            console.log(`select * from users where twitter_user_name = "${userName}"`);
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                res.sendStatus(401);
+            } else if (result.length == 0) {
+                res.sendStatus(401)
+            }
+            else {
+                // res.sendStatus(200);
+                console.log("result=" ,result);
+                console.log("fields= ",fields);
+                res.redirect('/');
+            }
+        }
+    );
 });
 
 /* GET now playing page. */
@@ -70,11 +76,13 @@ router.get('/', function (req, res, next) {
 
     // var www=require('../bin/www');
     // var io=www.io;
-    console.log(req.session.passport);
+
+    console.log("get nowplaying " + req.session.passport);
     res.render('now-playing', {
         title: 'login demo',
         session: req.session.passport //passportでログイン後は、このオブジェクトに情報が格納されます。
     });
+
 });
 
 module.exports = router;

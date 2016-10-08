@@ -91,7 +91,11 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-io.on('connection',function (socket) {
+io.sockets.on('connection',function (socket) {
   console.log('a user is connected!')
+  socket.on('lastfm_user_name',function (userName) {
+    console.log(userName);
+  });
 });
+
 module.exports.io=io;

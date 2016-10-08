@@ -2,3 +2,6 @@ body{
     background:#141414;
     overflow:hidden;
 }
+input{
+    color: white !important;
+}

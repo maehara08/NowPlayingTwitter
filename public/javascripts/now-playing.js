@@ -53,7 +53,7 @@ window.onload = function (argument) {
         this.speed = (this.fontSize)/5;
         // this.speed = (this.fontSize)*this.fontSize/1000+4;
         // this.speed = (words[key]);
-        console.log(this.font);
+        // console.log(this.font);
     };
 
     //var lyric = "i couldn't take it couldn't stand another minute couldn't bear another day without you in it";
@@ -150,9 +150,14 @@ window.onload = function (argument) {
             return false;
         });
 
+        $('#submitLastfmUserName').click(function () {
+           socket.emit('lastfm_user_name', $('input').val());
+            console.log($('input').val());
+        });
+
         socket.on('msg', function (data) {
             var resizeTweet = string_handle(data);
-            console.log(resizeTweet);
+            // console.log(resizeTweet);
             tweetQueue.enqueue(new Word(resizeTweet));
         });
     });

@@ -25,7 +25,17 @@
 
 {{#if session}}
     <div><img src="{{session.user.photos.[0].value }}">
-        <a href="/nowplaying/post" class="btn-large waves-effect waves-light" style="text-transform: none;">Let's tweet!</a>
+        <div class="row">
+            <div class="input-field col s4">
+                <input id="lastfm_username" type="text" class="UserNameInput">
+                <label for="lastfm_username">last.fm username </label>
+            </div>
+            <!--<a href="/nowplaying/post" class="btn-large waves-effect waves-light" style="text-transform: none;">Let's tweet!</a>-->
+
+            <button class="btn waves-effect waves-light" type="submit" name="action" id="submitLastfmUserName">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
     </div>
 {{else}}
     <a href="/oauth" class="btn-large waves-effect waves-light" style="text-transform: none;">Twitterでログイン</a>
@@ -35,6 +45,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 <script type="text/javascript" src="/javascripts/now-playing.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </body>
 
 </html>
