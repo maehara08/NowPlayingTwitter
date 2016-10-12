@@ -124,14 +124,13 @@ io.sockets.on('connection',function (socket) {
   console.log('a user is connected!');
   var user = socket.request.user; //これでユーザーを参照できる
   if(user){
-    console.log("session data : ", user);
+    // console.log("session data : ", user);
   }
   socket.on('lastfm_user_name',function (userName) {
-    console.log(userName);
+    // console.log(userName);
     var query='update users set last_fm_user_name = ? where twitter_user_name = ? ';
     var placeHolder=[];
     placeHolder.push(userName,user.username);
-    console.log(placeHolder);
     connection.query(query,placeHolder,function(err,result,fields){
         if (err){
           console.error(err);
