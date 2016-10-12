@@ -11,6 +11,8 @@
   "dependencies": {
     "body-parser": "~1.15.1",
     "bookshelf": "^0.10.2",
+    "connect-mysql": "^2.1.1",
+    "cookie": "^0.3.1",
     "cookie-parser": "~1.4.3",
     "cron": "^1.1.0",
     "debug": "~2.2.0",
@@ -24,6 +26,7 @@
     "mysql": "^2.11.1",
     "passport": "^0.3.2",
     "passport-twitter": "^1.0.4",
+    "passport.socketio": "^3.6.2",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.4.8",
     "twit": "^2.2.5"

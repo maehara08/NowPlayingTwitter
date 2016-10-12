@@ -13,3 +13,5 @@ created_at timestamp not null default current_timestamp
 );
 
 insert into users(twitter_user_name,twitter_display_name,access_token,access_token_secret) values();
+
+update users set last_fm_user_name = 'tes' where twitter_user_name ='m_riku_0521';

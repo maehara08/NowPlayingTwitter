@@ -5,6 +5,18 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var session = require('express-session');
+var MySQLSesstion = require('connect-mysql')(session),
+    options = {
+    pool:true,
+        config: {
+            host: 'localhost',
+            user: 'tweetdbuser',
+            password: 'now_playing',
+            database: 'now_playing'
+        }
+    };
+var sessionStore=new MySQLSesstion(options);
 
 
 var oauth = require('./routes/oauth');
@@ -28,6 +40,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('express-session')({
+    store: sessionStore,
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false
@@ -61,8 +74,8 @@ passport.use(new TwitterStrategy({
         "${profile.displayName}","${token}","${tokenSecret}");`,
             function (err) {
                 if (err) {
-                    if (err.message===`ER_DUP_ENTRY: Duplicate entry '${profile.username}' for key 'twitter_user_name'`){
-                        console.log("Mysql insert error, "+profile.username+" is already exist");
+                    if (err.message === `ER_DUP_ENTRY: Duplicate entry '${profile.username}' for key 'twitter_user_name'`) {
+                        console.log("Mysql insert error, " + profile.username + " is already exist");
                         return
                     }
                     console.error('error connecting: ' + err.stack);
@@ -112,5 +125,6 @@ app.use(function (err, req, res, next) {
     });
 });
 
-
+app.__sessionStore=sessionStore;
+app.__passport=passport;
 module.exports = app;

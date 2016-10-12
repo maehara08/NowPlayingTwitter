@@ -30,7 +30,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 var io=require('socket.io')(server);
-
+var passport=app.__passport;
 /**
  * Normalize a port into a number, string, or false.
  */
@@ -91,10 +91,54 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
+var connection = require('../util/mysql_util');
+var passportSocketIo = require("passport.socketio");
+io.use(passportSocketIo.authorize({
+  passport : passport,
+  cookieParser: require('cookie-parser'),
+  // key:          'express.sid',
+  secret:       'keyboard cat',
+  store:        app.__sessionStore, //さっきの sessionStore 渡す
+  success:      onAuthorizeSuccess,
+  fail:         onAuthorizeFail
+}));
+
+// // セッションのAuthorize 成功
+//
+function onAuthorizeSuccess(data, accept){
+  console.log('successful connection to socket.io');
+  accept(null, true);
+
+}
+
+//セッションのAuthorizeしっぱいしっぱい
+function onAuthorizeFail(data, message, error, accept){
+  if(error) {
+    throw new Error(message);
+  }
+  console.log('failed connection to socket.io:', message);
+  accept(null, false);
+}
+
 io.sockets.on('connection',function (socket) {
-  console.log('a user is connected!')
+  console.log('a user is connected!');
+  var user = socket.request.user; //これでユーザーを参照できる
+  if(user){
+    console.log("session data : ", user);
+  }
   socket.on('lastfm_user_name',function (userName) {
     console.log(userName);
+    var query='update users set last_fm_user_name = ? where twitter_user_name = ? ';
+    var placeHolder=[];
+    placeHolder.push(userName,user.username);
+    console.log(placeHolder);
+    connection.query(query,placeHolder,function(err,result,fields){
+        if (err){
+          console.error(err);
+          return;
+        }
+        console.log("result =  ",result);
+    });
   });
 });
 
