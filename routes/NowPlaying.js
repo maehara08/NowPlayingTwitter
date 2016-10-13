@@ -5,6 +5,8 @@ var express = require('express');
 var Twit = require('twit');
 var request = require('request');
 var co = require('co');
+var CronJob = require('cron').CronJob;
+var moment = require('moment');
 
 var router = express.Router();
 var io = require('../bin/www');
@@ -32,23 +34,6 @@ stream.on('tweet', function (tw) {
 /**
  * last fm username
  */
-
-
-// T.get('search/tweets', {q: '山手線', count: 30}, function (err, data) {
-//     console.log(data);
-//     var statuses = data['statuses'];
-//     if (err) {
-//         console.error("Twitter,Now Playing Error!")
-//         console.error(err);
-//     }
-//     else {
-//         for (var i = statuses.length - 1; i >= 0; i--) {
-//             var user_name = statuses[i].user.name;
-//             var text = statuses[i].text;
-//             console.log(i + ' : ' + user_name + ' > ' + text);
-//         }
-//     }
-// });
 
 router.get('/post', function (req, res) {
     var userName = req.session.passport.user.username;
@@ -80,7 +65,6 @@ router.get('/', function (req, res, next) {
     // var www=require('../bin/www');
     // var io=www.io;
 
-    selectFromDb();
     console.log("get nowplaying " + req.session.passport);
     res.render('now-playing', {
         title: 'login demo',
@@ -146,25 +130,28 @@ function tweetLastFm(at, ats, albums) {
         timeout_ms: 60 * 1000  // optional HTTP request timeout to apply to all requests.
     });
     console.log('Tweet?');
-    // albums.forEach(function (value) {
-    //    console.log(value.artist['#text']);
-    // });
     var albumChart = "";
     for (var i = 0; i < 3; i++) {
-        albumChart +=  (i+1) +"."+ "Album:" + albums[i].name+" Artist:"+albums[i].artist['#text']+" ";
+        albumChart += (i + 1) + "." + "Album:" + albums[i].name + " Artist:" + albums[i].artist['#text'] + " ";
     }
-    albumChart="WeeklyBestAlbum♫ " + albumChart+"#TwitterScrobble";
+    albumChart = "WeeklyBestAlbum♫ " + albumChart + "#TwitterScrobble";
     console.log(albumChart);
-    // Tw.post('statuses/update', {status: "WeeklyBestAlbum♫ " + albumChart}, function (err, data, response) {
-    //     if (err){
-    //         console.error(err);
-    //         return;
-    //     }
-    //     console.log(response);
-    //     console.log('Tweet!');
-    // });
-
+    Tw.post('statuses/update', {status: "WeeklyBestAlbum♫ " + albumChart}, function (err, data, response) {
+        if (err){
+            console.error(err);
+            return;
+        }
+        console.log(response);
+        console.log('Tweet!');
+    });
 }
 
+var cronTime = '* * * * *';
+new CronJob({
+    cronTime: cronTime,
+    onTick: function () {
+        selectFromDb();
+    }, start: true
+});
 
 module.exports = router;
