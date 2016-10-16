@@ -146,12 +146,12 @@ function tweetLastFm(at, ats, albums) {
     });
 }
 
-// var cronTime = '* * * * *';
-// new CronJob({
-//     cronTime: cronTime,
-//     onTick: function () {
-//         selectFromDb();
-//     }, start: true
-// });
+var cronTime = '0 0 * * *';
+new CronJob({
+    cronTime: cronTime,
+    onTick: function () {
+        selectFromDb();
+    }, start: true
+});
 
 module.exports = router;
