@@ -29,7 +29,7 @@ window.onload = function (argument) {
             while (!this.get(0).text) {
                 this.dequeue();
             }
-            if (this.size()>400){
+            if (this.size()>250){
                 this.dequeue();
             }
         }
