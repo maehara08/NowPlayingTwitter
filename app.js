@@ -66,7 +66,7 @@ passport.deserializeUser(function (obj, done) {
 passport.use(new TwitterStrategy({
         consumerKey: process.env.TWITTER_CONSUMER_KEY,
         consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-        callbackURL: "http://localhost:3000/oauth/callback/" //Twitterログイン後、遷移するURL
+        callbackURL: process.env.CALLBACK_URL|"http://localhost:3000/oauth/callback/" //Twitterログイン後、遷移するURL
     },
     function (token, tokenSecret, profile, done) {
         // console.log(token, tokenSecret, profile);

@@ -132,8 +132,13 @@ function tweetLastFm(at, ats, albums) {
     console.log('Tweet?');
     var albumChart = "";
     for (var i = 0; i < 3; i++) {
-        albumChart += (i + 1) + "." + "Album:" + albums[i].name + " Artist:" + albums[i].artist['#text'] + " ";
+        var  temp=albumChart;
+        albumChart += (i + 1) + "." + "Album:" + albums[i].name + "-" + albums[i].artist['#text'] + " ";
+        if (albumChart>=111){
+            albumChart=temp;
+        }
     }
+
     albumChart = "WeeklyBestAlbum♫ " + albumChart + "#TwitterScrobble";
     console.log(albumChart);
     Tw.post('statuses/update', {status: "WeeklyBestAlbum♫ " + albumChart}, function (err, data, response) {
