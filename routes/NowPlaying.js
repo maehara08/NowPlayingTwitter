@@ -116,7 +116,6 @@ function postLastFm(lastFmUserName, at, ats) {
             tweetLastFm(at, ats, albums);
         } else {
             console.error(err);
-            console.log("err", body);
         }
     });
 }
@@ -134,24 +133,23 @@ function tweetLastFm(at, ats, albums) {
     for (var i = 0; i < 3; i++) {
         var  temp=albumChart;
         albumChart += (i + 1) + "." + "Album:" + albums[i].name + "-" + albums[i].artist['#text'] + " ";
-        if (albumChart>=111){
+        if (albumChart.length>=111){
             albumChart=temp;
         }
     }
 
     albumChart = "WeeklyBestAlbum♫ " + albumChart + "#TwitterScrobble";
     console.log(albumChart);
-    Tw.post('statuses/update', {status: "WeeklyBestAlbum♫ " + albumChart}, function (err, data, response) {
+    Tw.post('statuses/update', {status:albumChart}, function (err, data, response) {
         if (err){
             console.error(err);
             return;
         }
-        console.log(response);
-        console.log('Tweet!');
+        // console.log(response);
     });
 }
 
-var cronTime = '0 0 * * *';
+var cronTime = '0 0 * * 0';
 new CronJob({
     cronTime: cronTime,
     onTick: function () {
